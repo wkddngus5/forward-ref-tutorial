@@ -1,0 +1,13 @@
+.side-menu {
+    position: fixed;
+    left: -400px;
+    width: 400px;
+    height: 100%;
+    background-color: #ffffff;
+    color: #000000;
+    transition: 0.3s;
+}
+
+.side-menu.is-visible {
+    left: 0;
+}
