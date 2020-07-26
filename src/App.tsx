@@ -1,26 +1,46 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import logo from './logo.svg';
+import SideMenu from './SideMenu';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [ isSideMenuVisible, setIsSideMenuVisible ] = useState<boolean>( false );
+    const sideMenuRef = useRef<HTMLDivElement>( document.createElement( 'div' ) );
+    const sideMenuButtonRef = useRef<HTMLButtonElement>( document.createElement( 'button' ) );
+
+    const onClickSideMenuButton = useCallback( ( event: React.MouseEvent<HTMLButtonElement>) => {
+        setIsSideMenuVisible( true );
+    }, []);
+
+    useEffect( () => {
+        document.addEventListener( 'click', ( event: any ) => {
+            const { target } = event;
+            console.log( sideMenuRef.current.contains( target ) );
+            if ( sideMenuRef.current.contains( target ) || sideMenuButtonRef.current.contains( target ) ) {
+                return;
+            }
+            setIsSideMenuVisible( false );
+        } );
+    }, []);
+
+    return (
+        <div className="App">
+            <header className="App-header">
+                <SideMenu
+                    ref={ sideMenuRef }
+                    isVisible={ isSideMenuVisible } />
+                <img src={logo} className="App-logo" alt="logo" />
+                <p>
+                    Edit <code>src/App.tsx</code> and save to reload.
+                </p>
+                <button
+                    ref={ sideMenuButtonRef }
+                    onClick={ onClickSideMenuButton }>
+                    Show SideMenu
+                </button>
+            </header>
+        </div>
+    );
 }
 
 export default App;
